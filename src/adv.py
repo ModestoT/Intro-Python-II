@@ -1,6 +1,6 @@
 from room import Room
 from player import Player
-
+from item import Item
 # Declare all the rooms
 
 room = {
@@ -40,7 +40,8 @@ room['treasure'].s_to = room['narrow']
 
 # Make a new player object that is currently in the 'outside' room.
 player = Player('Drol', room['outside'])
-
+print(f'Welcome {player.name}!!\nYou are currently in the room: {player.current_room.name}\nHow would you like to proceed?')
+user = int(input('[1] Check available paths [2] Check for items in current room [6] Quit\n'))
 # Write a loop that:
 #
 # * Prints the current room name
@@ -51,3 +52,61 @@ player = Player('Drol', room['outside'])
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
+
+while not user == 6:
+    if user == 1:
+        paths = player.current_room.checkPaths()
+
+        if len(paths) == 1:
+            print(f'Looks like we can only go {paths[0]}')
+            print('What would you like to do now?')
+            newInput = int(input(f'[1] Go {paths[0]}? [2] Check for items in current room [6] Quit\n'))
+            
+            if newInput == 1:
+                player.current_room = player.current_room.paths[0][paths[0]]
+                print(f'You are now in the {player.current_room.name}\nHow would you like to proceed?')
+                user = int(input('[1] Check avaiable paths? [2] Check for items in current room [6] Quit\n'))
+            elif newInput == 6:
+                user = 6
+        else :
+            print(f'Looks like we can go either {player.current_room.printPaths(paths)}')
+            
+            if len(paths) == 4:
+                print(paths)
+                newInput = int(input(f'[1] Go {paths[0]}? [2] Go {paths[1]}? [3] Go {paths[2]}? [4] Go {paths[3]}? [5] Check for items in current room [6] Quit\n'))
+                
+                if newInput < 5:
+                    player.current_room = player.current_room.getPaths()[newInput-1]
+                    print(f'You are now in the {player.current_room.name}\nHow would you like to proceed?')
+                    user = int(input('[1] Check avaiable paths? [2] Check for items in current room [6] Quit\n'))
+                elif newInput == 6:
+                    user = 6
+
+            elif len(paths) == 3:
+                newInput = int(input(f'[1] Go {paths[0]}? [2] Go {paths[1]}? [3] Go {paths[2]}? [4] Check for items in current room [6] Quit\n'))
+                
+                if newInput < 5:
+                    player.current_room = player.current_room.getPaths()[newInput-1]
+                    print(f'You are now in the {player.current_room.name}\nHow would you like to proceed?')
+                    user = int(input('[1] Check avaiable paths? [2] Check for items in current room [6] Quit\n'))
+                elif newInput == 6:
+                    user = 6
+
+            elif len(paths) == 2:
+                newInput = int(input(f'[1] Go {paths[0]}? [2] Go {paths[1]}? [3] Check for items in current room [6] Quit\n'))
+                
+                if newInput < 5:
+                    player.current_room = player.current_room.getPaths()[newInput-1]
+                    print(f'You are now in the {player.current_room.name}\nHow would you like to proceed?')
+                    user = int(input('[1] Check avaiable paths? [2] Check for items in current room [6] Quit\n'))
+                elif newInput == 6:
+                    user = 6
+        
+    elif user == 2:
+        print(f'Current items in the room:\n{player.current_room.items}') 
+
+    else:
+        print('Invalid input please try again.')
+    
+    #print(f'{player.name}. You are in the {player.current_room} room. What would you like to do now?')
+    #user = int(input('[1] Check available paths [2] Check for items in current room [5] Quit\n'))

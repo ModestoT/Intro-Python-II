@@ -12,3 +12,6 @@ class Player:
 
   def __str__(self):
     return ''+self.name+''
+
+  def addItem(self, item):
+    self.inventory.append(item)
