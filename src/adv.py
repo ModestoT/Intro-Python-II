@@ -84,8 +84,14 @@ def getItem(item, room):
     if item: 
         player.addItem(items[f'{item.lower()}'])
         room.removeItem(items[f'{item.lower()}'])
-        print(f'You added the {item} to your inventory!')
+    else: 
+        print('That item does not exist')
 
+def dropItem(item, room):
+    isItem = player.removeItem(items[f'{item.lower()}'])
+    if isItem != False:
+        room.addItem(items[f'{item.lower()}'])
+        
 def userInputField():
     user = input('Check available paths? Check for items in current room or Quit\n')
     userInputText = lowerCaseString(user.split())
@@ -132,6 +138,8 @@ while not userInput[0] == 'quit':
                     userInput = userInputField()
                 elif inputString[0] == 'check' and inputString[1] == 'items':
                     userInput[0] == 'items'
+                elif inputString[0] == 'drop':
+                    userInput = inputString
                 else:
                     print('Invalid command, please try again. Or type help')
                     userInput[0] == 'paths'
@@ -248,6 +256,9 @@ while not userInput[0] == 'quit':
 
     elif userInput[0] == 'inventory' or userInput[0] == 'check' and userInput[1] == 'inventory':
         print(f'Current inventory:\n{player.getInventory()}')
+        userInput = userInputField()
+    elif userInput[0] == 'drop':
+        dropItem(userInput[1], player.current_room)
         userInput = userInputField()
     elif userInput[0] == 'help':
         print('Some command examples you can do are:\ncheck paths\ncheck items\ncheck inventory or inventory\ngo (some direction)')
