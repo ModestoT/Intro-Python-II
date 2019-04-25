@@ -49,32 +49,53 @@ room['treasure'].addItem(items['gold'])
 # Main
 #
 def changeRoom(direction, current_room):
-    if direction == 'north':
-        player.current_room = current_room.n_to
+    if direction.lower() == 'north':
+        if current_room.n_to == '':
+            print('Invalid direction, please try again. Or type help')
+            return userInput[0] == 'paths'
+        else:
+            player.current_room = current_room.n_to
         
-    elif direction == 'south':
-        player.current_room = current_room.s_to
+    elif direction.lower() == 'south':
+        if current_room.s_to == '':
+            print('Invalid direction, please try again. Or type help')
+            return userInput[0] == 'paths'
+        else:
+            player.current_room = current_room.s_to
        
-    elif direction == 'east':
-        player.current_room = current_room.e_to
+    elif direction.lower() == 'east':
+        if current_room.e_to == '':
+            print('Invalid direction, please try again. Or type help')
+            return userInput[0] == 'paths'
+        else:
+            player.current_room = current_room.e_to
 
-    elif direction == 'west':
-        player.current_room = current_room.w_to
+    elif direction.lower() == 'west':
+        if current_room.w_to == '':
+            print('Invalid direction, please try again. Or type help')
+            return userInput[0] == 'paths'
+        else:
+            player.current_room = current_room.w_to
     else:
         print('Invalid direction, please try again. Or type help')
         return userInput[0] == 'paths'
 
 def getItem(item, room):
     if item: 
-        player.addItem(items[f'{item}'])
-        room.removeItem(items[f'{item}'])
+        player.addItem(items[f'{item.lower()}'])
+        room.removeItem(items[f'{item.lower()}'])
         print(f'You added the {item} to your inventory!')
 
 def userInputField():
     user = input('Check available paths? Check for items in current room or Quit\n')
-    userInputText = user.split()
-    
+    userInputText = lowerCaseString(user.split())
+
     return userInputText
+
+def lowerCaseString(string):
+    for i, s in enumerate(string):
+        string[i] = s.lower()
+    return string
 
 # Make a new player object that is currently in the 'outside' room.
 player = Player('Drol', room['outside'])
@@ -102,7 +123,8 @@ while not userInput[0] == 'quit':
             print('What would you like to do now?')
             print(f'Go {paths[0]}? Check for items in current room or Quit')
             newInput = input('')
-            inputString = newInput.split()
+            inputString = lowerCaseString(newInput.split())
+
             if len(inputString) == 2:
                 if inputString[0] == 'go':
                     changeRoom(inputString[1], player.current_room)
@@ -130,7 +152,7 @@ while not userInput[0] == 'quit':
             if len(paths) == 4:
                 print(f'Go {paths[0]}? Go {paths[1]}? Go {paths[2]}? Go {paths[3]}? Check for items in current room or Quit')
                 newInput = input('')
-                inputString = newInput.split()
+                inputString = lowerCaseString(newInput.split())
 
                 if len(inputString) == 2:
                     if inputString[0] == 'go':
@@ -156,7 +178,7 @@ while not userInput[0] == 'quit':
             elif len(paths) == 3:
                 print(f'Go {paths[0]}? Go {paths[1]}? Go {paths[2]}? Check for items in current room or Quit')
                 newInput = input('')
-                inputString = newInput.split()
+                inputString = lowerCaseString(newInput.split())
 
                 if len(inputString) == 2:
                     if inputString[0] == 'go':
@@ -182,7 +204,7 @@ while not userInput[0] == 'quit':
             elif len(paths) == 2:
                 print(f'Go {paths[0]}? Go {paths[1]}? Check for items in current room or Quit')
                 newInput = input('')
-                inputString = newInput.split()
+                inputString = lowerCaseString(newInput.split())
 
                 if len(inputString) == 2:
                     if inputString[0] == 'go':
@@ -213,12 +235,12 @@ while not userInput[0] == 'quit':
             room_items = player.current_room.getItems()
             print(f'Current items in the room:\n{room_items}') 
             newInput = input('Looks like theirs some items here, what would you like to do?\n')
-            i = newInput.split()
+            inputString = lowerCaseString(newInput.split())
 
-            if len(i) == 2 and i[0] == 'get' or i[0] == 'take':
-                getItem(i[1], player.current_room)
+            if len(inputString) == 2 and inputString[0] == 'get' or inputString[0] == 'take':
+                getItem(inputString[1], player.current_room)
                 userInput = userInputField()
-            elif i[0] == 'quit':
+            elif inputString[0] == 'quit':
                 userInput[0] = 'quit'
             else: 
                 print('Command not recognized, please try again')
