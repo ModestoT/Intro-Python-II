@@ -11,6 +11,7 @@ class Room:
     self.e_to = ''
     self.items = []
     self.paths = []
+    self.monsters = []
   
   def __repr__(self):
     return ''+self.name+' '+self.desc+''
@@ -55,3 +56,6 @@ class Room:
           routes.append(p[r])
 
     return routes
+
+  def addMonsters(self, monsters):
+    self.monsters = [m for m in monsters]

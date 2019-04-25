@@ -1,6 +1,9 @@
+import random
+
 from room import Room
 from player import Player
 from item import Item
+from monster import Monster
 # Declare all the rooms
 
 room = {
@@ -28,6 +31,13 @@ items = {
     'gold': Item('Gold', 'Looks like this is a currency of some type.'),
     'shield': Item('Shield', 'A wooden shield that is great for blocking weak attacks')
 }
+
+monsters = {
+    'goblin' : Monster('Goblin', 5, 2, 10),
+    'orc': Monster('Orc', 10, 10, 20),
+    'wolf': Monster('Wolf', 10, 10, 10),
+    'snake': Monster('Snake', 2, 2, 2)
+}
 # Link rooms together
 
 room['outside'].n_to = room['foyer']
@@ -45,6 +55,21 @@ room['foyer'].addItem(items['apple'])
 room['overlook'].addItem(items['shield'])
 room['narrow'].addItem(items['apple'])
 room['treasure'].addItem(items['gold'])
+
+# Add monters to rooms
+
+for i, r in room.items():
+    for k, m in monsters.items():
+        ran_num = random.randint(1,100)
+        if ran_num > 80:
+            r.monsters.append(monsters['goblin'])
+        elif ran_num > 50:
+            r.monsters.append(monsters['orc'])
+        elif ran_num > 30:
+            r.monsters.append(monsters['wolf'])
+        else:
+            r.monsters.append(monsters['snake'])
+
 #
 # Main
 #
@@ -105,7 +130,7 @@ def lowerCaseString(string):
 
 # Make a new player object that is currently in the 'outside' room.
 player = Player('Drol', room['outside'])
-print(f'Welcome {player.name}!!\nYou are currently in the room: {player.current_room}\nHow would you like to proceed?')
+print(f'Welcome {player.name}!!\nYou are currently in the room: {player.current_room}\nThere are {len(player.current_room.monsters)} Monsters here. How would you like to proceed?')
 userInput = userInputField()
 
 # Write a loop that:
@@ -120,7 +145,6 @@ userInput = userInputField()
 # If the user enters "q", quit the game.
 
 while not userInput[0] == 'quit':
-    print(userInput)
     if userInput[0] == 'paths' or userInput[0] == 'check' and userInput[1] == 'paths':
         paths = player.current_room.checkPaths()
         routes = player.current_room.paths
@@ -169,6 +193,8 @@ while not userInput[0] == 'quit':
                         userInput = userInputField()
                     elif inputString[0] == 'check' and inputString[1] == 'items':
                         userInput[0] == 'items'
+                    elif inputString[0] == 'drop':
+                        userInput = inputString
                     else:
                         print('Invalid command, please try again. Or type help')
                         userInput[0] == 'paths'
@@ -195,6 +221,8 @@ while not userInput[0] == 'quit':
                         userInput = userInputField()
                     elif inputString[0] == 'check' and inputString[1] == 'items':
                         userInput[0] == 'items'
+                    elif inputString[0] == 'drop':
+                        userInput = inputString
                     else:
                         print('Invalid command, please try again. Or type help')
                         userInput[0] == 'paths'
@@ -221,6 +249,8 @@ while not userInput[0] == 'quit':
                         userInput = userInputField()
                     elif inputString[0] == 'check' and inputString[1] == 'items':
                         userInput[0] == 'items'
+                    elif inputString[0] == 'drop':
+                        userInput = inputString
                     else:
                         print('Invalid command, please try again. Or type help')
                         userInput[0] == 'paths'
@@ -248,6 +278,8 @@ while not userInput[0] == 'quit':
             if len(inputString) == 2 and inputString[0] == 'get' or inputString[0] == 'take':
                 getItem(inputString[1], player.current_room)
                 userInput = userInputField()
+            elif inputString[0] == 'drop':
+                userInput = inputString
             elif inputString[0] == 'quit':
                 userInput[0] = 'quit'
             else: 
@@ -257,12 +289,15 @@ while not userInput[0] == 'quit':
     elif userInput[0] == 'inventory' or userInput[0] == 'check' and userInput[1] == 'inventory':
         print(f'Current inventory:\n{player.getInventory()}')
         userInput = userInputField()
+
     elif userInput[0] == 'drop':
         dropItem(userInput[1], player.current_room)
         userInput = userInputField()
+
     elif userInput[0] == 'help':
         print('Some command examples you can do are:\ncheck paths\ncheck items\ncheck inventory or inventory\ngo (some direction)')
         userInput = userInputField()
+
     else:
         print('Invalid input please try again.')
         userInput = userInputField()
