@@ -15,3 +15,10 @@ class Player:
 
   def addItem(self, item):
     self.inventory.append(item)
+
+  def getInventory(self):
+    inventory = [str(i.name) for i in self.inventory]
+
+    res = '   '.join(inventory)
+
+    return res 

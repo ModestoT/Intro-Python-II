@@ -48,21 +48,6 @@ room['treasure'].addItem(items['gold'])
 #
 # Main
 #
-
-# Make a new player object that is currently in the 'outside' room.
-player = Player('Drol', room['outside'])
-print(f'Welcome {player.name}!!\nYou are currently in the room: {player.current_room}\nHow would you like to proceed?')
-user = input('Check available paths? Check for items in current room or Quit\n')
-# Write a loop that:
-#
-# * Prints the current room name
-# * Prints the current description (the textwrap module might be useful here).
-# * Waits for user input and decides what to do.
-#
-# If the user enters a cardinal direction, attempt to move to the room there.
-# Print an error message if the movement isn't allowed.
-#
-# If the user enters "q", quit the game.
 def changeRoom(direction, current_room):
     if direction == 'north':
         player.current_room = current_room.n_to
@@ -75,17 +60,41 @@ def changeRoom(direction, current_room):
 
     elif direction == 'west':
         player.current_room = current_room.w_to
+    else:
+        print('Invalid direction, please try again. Or type help')
+        return userInput[0] == 'paths'
 
 def getItem(item, room):
     if item: 
         player.addItem(items[f'{item}'])
         room.removeItem(items[f'{item}'])
         print(f'You added the {item} to your inventory!')
-        print(player.inventory)
 
+def userInputField():
+    user = input('Check available paths? Check for items in current room or Quit\n')
+    userInputText = user.split()
     
-while not user == 'quit':
-    if user == 'paths':
+    return userInputText
+
+# Make a new player object that is currently in the 'outside' room.
+player = Player('Drol', room['outside'])
+print(f'Welcome {player.name}!!\nYou are currently in the room: {player.current_room}\nHow would you like to proceed?')
+userInput = userInputField()
+
+# Write a loop that:
+#
+# * Prints the current room name
+# * Prints the current description (the textwrap module might be useful here).
+# * Waits for user input and decides what to do.
+#
+# If the user enters a cardinal direction, attempt to move to the room there.
+# Print an error message if the movement isn't allowed.
+#
+# If the user enters "q", quit the game.
+
+while not userInput[0] == 'quit':
+    print(userInput)
+    if userInput[0] == 'paths' or userInput[0] == 'check' and userInput[1] == 'paths':
         paths = player.current_room.checkPaths()
         routes = player.current_room.paths
         if len(paths) == 1:
@@ -93,74 +102,136 @@ while not user == 'quit':
             print('What would you like to do now?')
             print(f'Go {paths[0]}? Check for items in current room or Quit')
             newInput = input('')
-            if newInput != 'quit':
-                changeRoom(newInput, player.current_room)
-                print(f'\nYou are now in the {player.current_room}\nHow would you like to proceed?')
-                user = input('Check avaiable paths? Check for items in current room or Quit\n')
-            elif newInput == 'items':
-                user = 'items'
+            inputString = newInput.split()
+            if len(inputString) == 2:
+                if inputString[0] == 'go':
+                    changeRoom(inputString[1], player.current_room)
+                    print(f'\nYou are now in the {player.current_room}\nHow would you like to proceed?')
+                    userInput = userInputField()
+                elif inputString[0] == 'check' and inputString[1] == 'items':
+                    userInput[0] == 'items'
+                else:
+                    print('Invalid command, please try again. Or type help')
+                    userInput[0] == 'paths'
+
             else:
-                user = 'quit'
+                if inputString[0] == 'items':
+                    userInput[0] = 'items'
+                elif inputString[0] == 'quit':
+                    userInput[0] = 'quit'
+                else:
+                    changeRoom(inputString[0], player.current_room)
+                    print(f'\nYou are now in the {player.current_room}\nHow would you like to proceed?')
+                    userInput = userInputField()
+
         else :
             print(f'\nLooks like we can go either {player.current_room.printPaths(paths)}')
             
             if len(paths) == 4:
                 print(f'Go {paths[0]}? Go {paths[1]}? Go {paths[2]}? Go {paths[3]}? Check for items in current room or Quit')
                 newInput = input('')
+                inputString = newInput.split()
 
-                if newInput != 'quit':
-                    changeRoom(newInput, player.current_room)
-                    print(f'\nYou are now in the {player.current_room}\nHow would you like to proceed?')
-                    user = input('Check avaiable paths? Check for items in current room or Quit\n')
-                elif newInput == 'items':
-                    user = 'items'
+                if len(inputString) == 2:
+                    if inputString[0] == 'go':
+                        changeRoom(inputString[1], player.current_room)
+                        print(f'\nYou are now in the {player.current_room}\nHow would you like to proceed?')
+                        userInput = userInputField()
+                    elif inputString[0] == 'check' and inputString[1] == 'items':
+                        userInput[0] == 'items'
+                    else:
+                        print('Invalid command, please try again. Or type help')
+                        userInput[0] == 'paths'
+
                 else:
-                    user = 'quit'
+                    if inputString[0] == 'items':
+                        userInput[0] = 'items'
+                    elif inputString[0] == 'quit':
+                        userInput[0] = 'quit'
+                    else:
+                        changeRoom(inputString[0], player.current_room)
+                        print(f'\nYou are now in the {player.current_room}\nHow would you like to proceed?')
+                        userInput = userInputField()
 
             elif len(paths) == 3:
                 print(f'Go {paths[0]}? Go {paths[1]}? Go {paths[2]}? Check for items in current room or Quit')
                 newInput = input('')
+                inputString = newInput.split()
 
-                if newInput != 'quit':
-                    changeRoom(newInput, player.current_room)
-                    print(f'\nYou are now in the {player.current_room}\nHow would you like to proceed?')
-                    user = input('Check avaiable paths? Check for items in current room or Quit\n')
-                elif newInput == 'items':
-                    user = 'items'
+                if len(inputString) == 2:
+                    if inputString[0] == 'go':
+                        changeRoom(inputString[1], player.current_room)
+                        print(f'\nYou are now in the {player.current_room}\nHow would you like to proceed?')
+                        userInput = userInputField()
+                    elif inputString[0] == 'check' and inputString[1] == 'items':
+                        userInput[0] == 'items'
+                    else:
+                        print('Invalid command, please try again. Or type help')
+                        userInput[0] == 'paths'
+
                 else:
-                    user = 'quit'
+                    if inputString[0] == 'items':
+                        userInput[0] = 'items'
+                    elif inputString[0] == 'quit':
+                        userInput[0] = 'quit'
+                    else:
+                        changeRoom(inputString[0], player.current_room)
+                        print(f'\nYou are now in the {player.current_room}\nHow would you like to proceed?')
+                        userInput = userInputField()
 
             elif len(paths) == 2:
                 print(f'Go {paths[0]}? Go {paths[1]}? Check for items in current room or Quit')
                 newInput = input('')
+                inputString = newInput.split()
 
-                if newInput != 'quit':
-                    changeRoom(newInput, player.current_room)
-                    print(f'\nYou are now in the {player.current_room}\nHow would you like to proceed?')
-                    user = input('Check avaiable paths? Check for items in current room or Quit\n')
-                elif newInput == 'items':
-                    user = 'items'
+                if len(inputString) == 2:
+                    if inputString[0] == 'go':
+                        changeRoom(inputString[1], player.current_room)
+                        print(f'\nYou are now in the {player.current_room}\nHow would you like to proceed?')
+                        userInput = userInputField()
+                    elif inputString[0] == 'check' and inputString[1] == 'items':
+                        userInput[0] == 'items'
+                    else:
+                        print('Invalid command, please try again. Or type help')
+                        userInput[0] == 'paths'
+
                 else:
-                    user = 'quit'
+                    if inputString[0] == 'items':
+                        userInput[0] = 'items'
+                    elif inputString[0] == 'quit':
+                        userInput[0] = 'quit'
+                    else:
+                        changeRoom(inputString[0], player.current_room)
+                        print(f'\nYou are now in the {player.current_room}\nHow would you like to proceed?')
+                        userInput = userInputField()
         
-    elif user == 'items':
+    elif userInput[0] == 'items' or userInput[0] == 'check' and userInput[1] == 'items':
         if len(player.current_room.items) == 0:
             print('There are no items in this room!')
-            user = input('Check avaiable paths? Check for items in current room or Quit\n')
+            userInput = userInputField()
         else:
-            items = player.current_room.getItems()
-            print(f'Current items in the room:\n{items}') 
+            room_items = player.current_room.getItems()
+            print(f'Current items in the room:\n{room_items}') 
             newInput = input('Looks like theirs some items here, what would you like to do?\n')
+            i = newInput.split()
 
-            if newInput == 'quit':
-                user = 'quit'
-            else:
-                getItem(newInput, player.current_room)
-                user = input('What would you like to do next? Check the available paths? Check for more items? Or quit\n')
+            if len(i) == 2 and i[0] == 'get' or i[0] == 'take':
+                getItem(i[1], player.current_room)
+                userInput = userInputField()
+            elif i[0] == 'quit':
+                userInput[0] = 'quit'
+            else: 
+                print('Command not recognized, please try again')
+                userInput[0] = 'items'
+
+    elif userInput[0] == 'inventory' or userInput[0] == 'check' and userInput[1] == 'inventory':
+        print(f'Current inventory:\n{player.getInventory()}')
+        userInput = userInputField()
+    elif userInput[0] == 'help':
+        print('Some command examples you can do are:\ncheck paths\ncheck items\ncheck inventory or inventory\ngo (some direction)')
+        userInput = userInputField()
     else:
-        print(user)
         print('Invalid input please try again.')
-        break
-    
+        userInput = userInputField()
     #print(f'{player.name}. You are in the {player.current_room} room. What would you like to do now?')
     #user = int(input('[1] Check available paths [2] Check for items in current room [5] Quit\n'))
