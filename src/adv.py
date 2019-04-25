@@ -59,7 +59,7 @@ room['treasure'].addItem(items['gold'])
 # Add monters to rooms
 
 for i, r in room.items():
-    for k, m in monsters.items():
+    for m in range(random.randint(1,5)):
         ran_num = random.randint(1,100)
         if ran_num > 80:
             r.monsters.append(monsters['goblin'])
@@ -130,7 +130,7 @@ def lowerCaseString(string):
 
 # Make a new player object that is currently in the 'outside' room.
 player = Player('Drol', room['outside'])
-print(f'Welcome {player.name}!!\nYou are currently in the room: {player.current_room}\nThere are {len(player.current_room.monsters)} Monsters here. How would you like to proceed?')
+print(f'Welcome {player.name}!!\nYou are currently in the room: {player.current_room}\nThere is {len(player.current_room.monsters)} monster(s) here. How would you like to proceed?')
 userInput = userInputField()
 
 # Write a loop that:
