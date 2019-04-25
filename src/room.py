@@ -13,17 +13,23 @@ class Room:
     self.paths = []
   
   def __repr__(self):
-    return ''+self.name+'\n'+self.desc+''
+    return ''+self.name+' '+self.desc+''
 
   def __str__(self):
-    return ''+self.name+'\n'+self.desc+''
+    return ''+self.name+' '+self.desc+''
   
   def addItem(self, item):
     self.items.append(item)
   
+  def removeItem(self, item):
+    self.items.remove(item)
+
   def getItems(self):
-    for i in self.items:
-      print(i)
+    items = [str(i.name) for i in self.items]
+
+    res = '   '.join(items)
+
+    return res 
 
   def checkPaths(self):
     self.paths = [{ "north": self.n_to, "west":self.w_to, "south":self.s_to, "east":self.e_to }]

@@ -51,7 +51,7 @@ room['treasure'].addItem(items['gold'])
 
 # Make a new player object that is currently in the 'outside' room.
 player = Player('Drol', room['outside'])
-print(f'Welcome {player.name}!!\nYou are currently in the room: {player.current_room.name}\nHow would you like to proceed?')
+print(f'Welcome {player.name}!!\nYou are currently in the room: {player.current_room}\nHow would you like to proceed?')
 user = input('Check available paths? Check for items in current room or Quit\n')
 # Write a loop that:
 #
@@ -76,9 +76,10 @@ def changeRoom(direction, current_room):
     elif direction == 'west':
         player.current_room = current_room.w_to
 
-def getItem(item):
+def getItem(item, room):
     if item: 
         player.addItem(items[f'{item}'])
+        room.removeItem(items[f'{item}'])
         print(f'You added the {item} to your inventory!')
         print(player.inventory)
 
@@ -94,7 +95,7 @@ while not user == 'quit':
             newInput = input('')
             if newInput != 'quit':
                 changeRoom(newInput, player.current_room)
-                print(f'\nYou are now in the {player.current_room.name}\nHow would you like to proceed?')
+                print(f'\nYou are now in the {player.current_room}\nHow would you like to proceed?')
                 user = input('Check avaiable paths? Check for items in current room or Quit\n')
             elif newInput == 'items':
                 user = 'items'
@@ -109,7 +110,7 @@ while not user == 'quit':
 
                 if newInput != 'quit':
                     changeRoom(newInput, player.current_room)
-                    print(f'\nYou are now in the {player.current_room.name}\nHow would you like to proceed?')
+                    print(f'\nYou are now in the {player.current_room}\nHow would you like to proceed?')
                     user = input('Check avaiable paths? Check for items in current room or Quit\n')
                 elif newInput == 'items':
                     user = 'items'
@@ -122,7 +123,7 @@ while not user == 'quit':
 
                 if newInput != 'quit':
                     changeRoom(newInput, player.current_room)
-                    print(f'\nYou are now in the {player.current_room.name}\nHow would you like to proceed?')
+                    print(f'\nYou are now in the {player.current_room}\nHow would you like to proceed?')
                     user = input('Check avaiable paths? Check for items in current room or Quit\n')
                 elif newInput == 'items':
                     user = 'items'
@@ -135,7 +136,7 @@ while not user == 'quit':
 
                 if newInput != 'quit':
                     changeRoom(newInput, player.current_room)
-                    print(f'\nYou are now in the {player.current_room.name}\nHow would you like to proceed?')
+                    print(f'\nYou are now in the {player.current_room}\nHow would you like to proceed?')
                     user = input('Check avaiable paths? Check for items in current room or Quit\n')
                 elif newInput == 'items':
                     user = 'items'
@@ -147,13 +148,14 @@ while not user == 'quit':
             print('There are no items in this room!')
             user = input('Check avaiable paths? Check for items in current room or Quit\n')
         else:
-            print(f'Current items in the room:\n{player.current_room.items}') 
+            items = player.current_room.getItems()
+            print(f'Current items in the room:\n{items}') 
             newInput = input('Looks like theirs some items here, what would you like to do?\n')
 
             if newInput == 'quit':
                 user = 'quit'
             else:
-                getItem(newInput)
+                getItem(newInput, player.current_room)
                 user = input('What would you like to do next? Check the available paths? Check for more items? Or quit\n')
     else:
         print(user)
