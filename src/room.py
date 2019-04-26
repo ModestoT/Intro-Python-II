@@ -61,7 +61,7 @@ class Room:
     self.monsters = [m for m in monsters]
   
   def printMonsters(self):
-    monsters = [m.name for m in self.monsters]
+    monsters = [f'{m.name} {str(i)}' for i, m in enumerate(self.monsters)]
     string = ', '.join(monsters)
-    
+
     return string
