@@ -297,7 +297,9 @@ while not userInput[0] == 'quit':
     elif userInput[0] == 'help':
         print('Some command examples you can do are:\ncheck paths\ncheck items\ncheck inventory or inventory\ngo (some direction)')
         userInput = userInputField()
-
+    elif userInput[0] == 'monsters' or userInput[0] == 'check' and userInput[1] == 'monsters':
+        print(f'Room Monsters: {player.current_room.printMonsters()}')
+        userInput = userInputField()
     else:
         print('Invalid input please try again.')
         userInput = userInputField()

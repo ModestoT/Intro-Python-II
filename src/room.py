@@ -46,7 +46,7 @@ class Room:
     string = ', '.join(paths)
     
     return string
-
+  
   def getPaths(self):
     self.paths = [{ "north": self.n_to, "west":self.w_to, "south":self.s_to, "east":self.e_to }]
     routes = []
@@ -59,3 +59,9 @@ class Room:
 
   def addMonsters(self, monsters):
     self.monsters = [m for m in monsters]
+  
+  def printMonsters(self):
+    monsters = [m.name for m in self.monsters]
+    string = ', '.join(monsters)
+    
+    return string
